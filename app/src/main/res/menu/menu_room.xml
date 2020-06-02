@@ -20,6 +20,7 @@
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_photoUpload"
+        android:icon="@drawable/photo2"
         android:title="@string/action_photoUpload"
         app:showAsAction="ifRoom" />
 
