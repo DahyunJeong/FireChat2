@@ -11,8 +11,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import net.skhu.firechat2.Item.RoomMemberLocationItem;
 import net.skhu.firechat2.ListenerInterface.RoomLocationListener.Firebase.OnChildAddedLocationListener;
-import net.skhu.firechat2.ListenerInterface.RoomLocationListener.Firebase.OnChildRemovedLocationListener;
 import net.skhu.firechat2.ListenerInterface.RoomLocationListener.Firebase.OnChildChangedLocationListener;
+import net.skhu.firechat2.ListenerInterface.RoomLocationListener.Firebase.OnChildRemovedLocationListener;
 import net.skhu.firechat2.Room.MemberLocation.GpsTracker;
 
 import java.io.File;
@@ -72,7 +72,7 @@ public class FirebaseDbServiceForRoomMemberLocationList implements ChildEventLis
             RoomMemberLocationList = "RoomMemberLocationList1";
         }*/
 
-        databaseReference = FirebaseDatabase.getInstance().getReference("myServerData04");
+        databaseReference = FirebaseDatabase.getInstance().getReference(FireBaseReference.FIREBASE_REAL_TIME_DB_REF);
         //RoomMemberLocationListKey = databaseReference.child(roomKey).push().getKey();
 
         databaseReference.child(roomKey).child(roomMemberLocationKey).child(RoomMemberLocationList).addChildEventListener(this);
