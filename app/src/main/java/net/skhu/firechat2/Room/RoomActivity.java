@@ -46,9 +46,6 @@ import com.google.firebase.storage.StorageReference;
 import net.skhu.firechat2.FirebaseDBService.RealTimeDB.FirebaseDbService;
 import net.skhu.firechat2.FirebaseDBService.RealTimeDB.FirebaseDbServiceForRoomMemberLocationList;
 import net.skhu.firechat2.FirebaseDBService.Storage.FirebaseStorageService;
-import net.skhu.firechat2.Room.UploadActivity.MusicUploadActivity;
-import net.skhu.firechat2.Room.UploadActivity.PhotoUploadActivity;
-import net.skhu.firechat2.Room.UploadActivity.VideoUploadActivity;
 import net.skhu.firechat2.Item.Item;
 import net.skhu.firechat2.Item.RoomMemberLocationItem;
 import net.skhu.firechat2.R;
@@ -60,6 +57,9 @@ import net.skhu.firechat2.Room.Preview.PhotoPreviewActivity;
 import net.skhu.firechat2.Room.Preview.VideoPreviewActivity;
 import net.skhu.firechat2.Room.Thread.LocationUpdateThread;
 import net.skhu.firechat2.Room.Thread.RemoveFileThread;
+import net.skhu.firechat2.Room.UploadActivity.MusicUploadActivity;
+import net.skhu.firechat2.Room.UploadActivity.PhotoUploadActivity;
+import net.skhu.firechat2.Room.UploadActivity.VideoUploadActivity;
 import net.skhu.firechat2.UnCatchTaskService;
 
 import java.io.File;
@@ -615,8 +615,19 @@ public class RoomActivity extends AppCompatActivity {
             this.showRenameDialog();
             return true;
         } else if (id == R.id.action_removeAll) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage(R.string.action_removeAll);
+            builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int index) {
+                            // 삭제 작업 실행
+                            removeAll();
+                        }
+                    });
+            builder.setNegativeButton(R.string.close, null);
+            AlertDialog dialog = builder.create();
+            dialog.show();
             //firebaseDbService.removeAllFromServer();
-            removeAll();
             return true;
         } else if (id == R.id.scroll) {
             this.showScrollDialog();
@@ -632,12 +643,23 @@ public class RoomActivity extends AppCompatActivity {
         }
         else if (id == R.id.action_closeRoom) {
             //firebaseDbService.removeAllFromServer();
-            removeAll();
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage(R.string.action_closeRoom);
+            builder.setPositiveButton(R.string.action_closeRoom, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int index) {
+                    // 삭제 작업 실행
+                    removeAll();
 
-            Intent intent = new Intent();
-            intent.putExtra("roomKey", roomKey);
-            setResult(Activity.RESULT_OK, intent);
-            finish();
+                    Intent intent = new Intent();
+                    intent.putExtra("roomKey", roomKey);
+                    setResult(Activity.RESULT_OK, intent);
+                    finish();
+                }
+            });
+            builder.setNegativeButton(R.string.close, null);
+            AlertDialog dialog = builder.create();
+            dialog.show();
 
             return true;
         }
