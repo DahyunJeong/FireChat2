@@ -22,7 +22,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import net.skhu.firechat2.FirebaseDBService.FirebaseDbServiceForRoomMemberLocationList;
+import net.skhu.firechat2.FirebaseDBService.RealTimeDB.FirebaseDbServiceForRoomMemberLocationList;
 import net.skhu.firechat2.Item.RoomMemberLocationItem;
 import net.skhu.firechat2.R;
 import net.skhu.firechat2.UnCatchTaskService;

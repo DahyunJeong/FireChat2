@@ -28,7 +28,7 @@ import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import net.skhu.firechat2.FirebaseDBService.FirebaseDbServiceForRoom;
+import net.skhu.firechat2.FirebaseDBService.RealTimeDB.FirebaseDbServiceForRoom;
 import net.skhu.firechat2.Item.RoomItem;
 import net.skhu.firechat2.Room.RoomActivity;
 
