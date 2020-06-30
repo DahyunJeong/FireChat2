@@ -689,8 +689,9 @@ public class RoomActivity extends AppCompatActivity {
                 public void onClick(DialogInterface dialog, int index) {
                     // 삭제 작업 실행
 
-
                     closedRoom = true;
+
+                    locationUpdateThread.cancel();
 
                     closeRoomThread = new CloseRoomThread(()->closeRoom());
                     Thread t = new Thread(closeRoomThread,"closeRoomThread");
