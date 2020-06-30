@@ -3,7 +3,6 @@ package net.skhu.firechat2.Room;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -34,14 +33,8 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.storage.FileDownloadTask;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
-import com.google.firebase.storage.StorageReference;
 
 import net.skhu.firechat2.FirebaseDBService.RealTimeDB.FirebaseDbService;
 import net.skhu.firechat2.FirebaseDBService.RealTimeDB.FirebaseDbServiceForRoomMemberLocationList;
@@ -554,6 +547,12 @@ public class RoomActivity extends AppCompatActivity {
         }
     }
 
+//    public void downloadPhoto(String downloadPhotoName){
+//        //if(roomChatRecyclerViewAdapter.get(selectIndex).getHavePhoto()) {
+//            FirebaseStorageService.imagesDownload(this, getFilesDir(), downloadPhotoName);
+//        //}
+//    }
+
     public void onChangedChatListener(String key, Item item){
         int index = roomChatRecyclerViewAdapter.update(key, item);  // 수정된 데이터를 itemList에 대입한다.
         // 전에 key 값으로 등록되었던 데이터가  덮어써진다. (overwrite)
@@ -1065,65 +1064,88 @@ public class RoomActivity extends AppCompatActivity {
                 if (extras != null) {
                     downloadFileName = extras.getString("downloadFileName");
 
+                    //downloadPhoto(downloadFileName);
 
-                    Toast.makeText(this, downloadFileName, Toast.LENGTH_LONG).show();
+                    Item item = new Item("사진");
+                    item.setUserName(userName);
+                    item.setUserEmail(userEmail);
+                    item.setPhotoFileName(downloadFileName);
+                    item.setHavePhoto(true);
+                    firebaseDbService.addIntoServer(item);
+//
+                    //downloadPhoto(downloadFileName);
 
-                    final FirebaseStorage storage = FirebaseStorage.getInstance();
-                    StorageReference storageRef = storage.getReferenceFromUrl("gs://firechat-51553.appspot.com").child("images/" + downloadFileName);
+//                    Toast.makeText(this, downloadFileName, Toast.LENGTH_LONG).show();
+//
+//                    final FirebaseStorage storage = FirebaseStorage.getInstance();
+//                    StorageReference storageRef = storage.getReferenceFromUrl(FireBaseReference.FIREBASE_STORAGE_REF).child("images/" + downloadFileName);
+//
+//                    try {
+//                        //로컬에 저장할 폴더의 위치
+//                        path = getFilesDir();
+//
+//                        //저장하는 파일의 이름
+//                        final File file = new File(path, downloadFileName);
+//                        try {
+//                            if (!path.exists()) {
+//                                //저장할 폴더가 없으면 생성
+//                                path.mkdirs();
+//                            }
+//                            file.createNewFile();
+//
+//                            //파일을 다운로드하는 Task 생성, 비동기식으로 진행
+//                            final FileDownloadTask fileDownloadTask = storageRef.getFile(file);
+//                            final ProgressDialog progressDialog = new ProgressDialog(this);
+//                            fileDownloadTask.addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+//                                String downloadPhotoName = downloadFileName;
+//
+//                                @Override
+//                                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+//                                    //다운로드 성공 후 할 일
+//                                    //Toast.makeText(MainActivity.this, file.getPath()+"다운로드 성공", Toast.LENGTH_LONG).show();
+//                                    Item item = new Item("사진");
+//                                    item.setUserName(userName);
+//                                    item.setUserEmail(userEmail);
+//                                    item.setPhotoFileName(downloadPhotoName);
+//                                    item.setHavePhoto(true);
+//                                    firebaseDbService.addIntoServer(item);
+//                                }
+//                            }).addOnFailureListener(new OnFailureListener() {
+//                                @Override
+//                                public void onFailure(@NonNull Exception exception) {
+//                                    //다운로드 실패 후 할 일
+//                                    //Toast.makeText(MainActivity.this, file.getPath()+"다운로드 실패", Toast.LENGTH_LONG).show();
+//                                }
+//                            }).addOnProgressListener(new OnProgressListener<FileDownloadTask.TaskSnapshot>() {
+//                                @Override
+//                                //진행상태 표시
+//                                public void onProgress(FileDownloadTask.TaskSnapshot taskSnapshot) {
+//
+//                                }
+//                            });
+//
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                }
 
-                    try {
-                        //로컬에 저장할 폴더의 위치
-                        path = getFilesDir();
 
-                        //저장하는 파일의 이름
-                        final File file = new File(path, downloadFileName);
-                        try {
-                            if (!path.exists()) {
-                                //저장할 폴더가 없으면 생성
-                                path.mkdirs();
-                            }
-                            file.createNewFile();
-
-                            //파일을 다운로드하는 Task 생성, 비동기식으로 진행
-                            final FileDownloadTask fileDownloadTask = storageRef.getFile(file);
-                            final ProgressDialog progressDialog = new ProgressDialog(this);
-                            fileDownloadTask.addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                                String downloadPhotoName = downloadFileName;
-
-                                @Override
-                                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                                    //다운로드 성공 후 할 일
-                                    //Toast.makeText(MainActivity.this, file.getPath()+"다운로드 성공", Toast.LENGTH_LONG).show();
-                                    Item item = new Item("사진");
-                                    item.setUserName(userName);
-                                    item.setUserEmail(userEmail);
-                                    item.setPhotoFileName(downloadPhotoName);
-                                    item.setHavePhoto(true);
-                                    firebaseDbService.addIntoServer(item);
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception exception) {
-                                    //다운로드 실패 후 할 일
-                                    //Toast.makeText(MainActivity.this, file.getPath()+"다운로드 실패", Toast.LENGTH_LONG).show();
-                                }
-                            }).addOnProgressListener(new OnProgressListener<FileDownloadTask.TaskSnapshot>() {
-                                @Override
-                                //진행상태 표시
-                                public void onProgress(FileDownloadTask.TaskSnapshot taskSnapshot) {
-
-                                }
-                            });
-
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+//                if (extras != null) {
+//                    downloadFileName = extras.getString("downloadFileName");
+//                    Item item = new Item("사진");
+//                    item.setUserName(userName);
+//                    item.setUserEmail(userEmail);
+//                    item.setPhotoFileName(downloadFileName);
+//                    item.setHavePhoto(true);
+//                    firebaseDbService.addIntoServer(item);
+//                }
                 }
             }
         }
+
 
         if (requestCode == PHOTO_PREVIEW) {
             if (resultCode == Activity.RESULT_OK) {
